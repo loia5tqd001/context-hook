@@ -13,6 +13,12 @@ const GLOBAL_CONTEXT_NAME = '__GLOBAL__';
 
 const providers: TProviders = {};
 
+const warning = (message: string) =>
+  console.log(
+    `%c [context-hook]: ${message}`,
+    'font-weight: bold; color: red; border: yellow; background: #fff999;'
+  );
+
 const getProviderKey = (key: TContextName | undefined): TContextName =>
   key === undefined ? GLOBAL_CONTEXT_NAME : key;
 
@@ -45,8 +51,8 @@ export function toContextHook<TReturn>(
   return () => {
     const contextValue = React.useContext(Context);
     if (contextValue === NO_PROVIDER) {
-      console.warn(
-        `[context-hook]: You forgot to wrap provider "${providerKey}" around its consumers (by either ContextHookProvider or withContextHook)`
+      warning(
+        `You forgot to wrap provider "${providerKey}" around its consumers (by either ContextHookProvider or withContextHook)`
       );
     }
     return contextValue;
@@ -57,9 +63,7 @@ export function ContextHookProvider(props: TProviderProps) {
   const providerKey = getProviderKey(props.contextName);
 
   if (providers[providerKey] === undefined) {
-    console.warn(
-      `[context-hook]: Provider "${providerKey}" is not consumed anywhere!`
-    );
+    warning(`Provider "${providerKey}" is not consumed anywhere!`);
     return props.children as JSX.Element;
   }
 

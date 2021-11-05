@@ -15,4 +15,4 @@ const Page4 = () => {
   );
 };
 
-export default withContextHook(Page4, 'context-without-consumer-maybe-for-typo-reason');
+export default withContextHook(Page4, 'context-without-consumers-maybe-for-typo-reason');
