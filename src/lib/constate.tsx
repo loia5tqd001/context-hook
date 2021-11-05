@@ -24,8 +24,7 @@ function constate<HookReturn>(
   useNormalHook: () => HookReturn
 ): [React.FC<{}>, () => HookReturn] {
   const Context = React.createContext<HookReturn>(NO_PROVIDER);
-  Context.displayName = useNormalHook.name;
-  const useContext = createUseContext(Context);
+  const useContext = () => React.useContext(Context);
 
   const Provider: React.ComponentType<React.PropsWithChildren<unknown>> = ({
     children,
@@ -33,7 +32,6 @@ function constate<HookReturn>(
     const value = useNormalHook();
     return <Context.Provider value={value}>{children}</Context.Provider>;
   };
-  Provider.displayName = '';
 
   return [Provider, useContext];
 }

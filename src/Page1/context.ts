@@ -14,4 +14,3 @@ const useCounter = () => {
 };
 
 export const useCounterContext = toContextHook(useCounter, PAGE1_CONTEXT);
-
