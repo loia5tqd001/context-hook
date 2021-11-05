@@ -28,7 +28,7 @@ const Element1 = () => {
 };
 
 const Element2 = () => {
-  const [bool, setBool] = toContextHook(useBoolean)();
+  const [bool, setBool] = toContextHook(useBoolean, 'page5')();
   const [count, setCount] = useCounterContext();
 
   return (

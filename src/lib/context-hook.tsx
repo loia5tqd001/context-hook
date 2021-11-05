@@ -38,10 +38,13 @@ export function toContextHook<TReturn>(
   contextName?: TContextName
 ) {
   const providerKey = getProviderKey(contextName);
+  const functionNameQuote = hook.name ? `"${hook.name}"` : 'Anonymous';
 
   if (reactMounted) {
     warning(
-      `You are trying to call toContextHook for "${hook.name}" with context name of "${providerKey}" incorrectly, you should call it statically instead of inside a React component`
+      `You are trying to call toContextHook for "${hook.name}" ${
+        contextName ? `with context name of "${providerKey}" ` : ''
+      }incorrectly, you should call it statically instead of inside a React component. Your ${functionNameQuote} function thus becomes a normal hook.`
     );
     return hook;
   }
@@ -62,10 +65,10 @@ export function toContextHook<TReturn>(
     const contextValue = React.useContext(Context);
     if (contextValue === NO_PROVIDER) {
       warning(
-        `You forgot to wrap provider "${providerKey}" around its consumers by either ContextHookProvider or withContextHook`
+        `You forgot to use either ContextHookProvider or withContextHook to wrap the provider "${providerKey}" around its corresponding consumers. Your ${functionNameQuote} function thus becomes a normal hook.`
       );
     }
-    return contextValue;
+    return hook();
   };
 }
 
@@ -74,7 +77,9 @@ export function ContextHookProvider(props: TProviderProps) {
   const providerKey = getProviderKey(props.contextName);
 
   if (providers[providerKey] === undefined) {
-    warning(`Provider "${providerKey}" is not consumed anywhere!`);
+    warning(
+      `Provider "${providerKey}" is not consumed anywhere! Make sure you are not running into a typo.`
+    );
     return props.children as JSX.Element;
   }
 
