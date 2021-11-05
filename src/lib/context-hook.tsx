@@ -13,10 +13,12 @@ const GLOBAL_CONTEXT_NAME = '__GLOBAL__';
 
 const providers: TProviders = {};
 
+let reactMounted = false;
+
 const warning = (message: string) =>
   console.log(
     `%c [context-hook]: ${message}`,
-    'font-weight: bold; color: red; border: yellow; background: #fff999;'
+    'font-weight: 500; color: red; border: yellow; background: #fcfad9;'
   );
 
 const getProviderKey = (key: TContextName | undefined): TContextName =>
@@ -36,6 +38,14 @@ export function toContextHook<TReturn>(
   contextName?: TContextName
 ) {
   const providerKey = getProviderKey(contextName);
+
+  if (reactMounted) {
+    warning(
+      `You are trying to call toContextHook for "${hook.name}" with context name of "${providerKey}" incorrectly, you should call it statically instead of inside a React component`
+    );
+    return hook;
+  }
+
   if (providers[providerKey] === undefined) providers[providerKey] = [];
 
   const Context = React.createContext<TReturn>(NO_PROVIDER);
@@ -46,13 +56,13 @@ export function toContextHook<TReturn>(
     hook.name || 'Anonymous'
   }`;
 
-  providers[providerKey].push(provider); // TODO: display warning if the user tries to call the hook twice (use the hook in the way not intended)
+  providers[providerKey].push(provider);
 
   return () => {
     const contextValue = React.useContext(Context);
     if (contextValue === NO_PROVIDER) {
       warning(
-        `You forgot to wrap provider "${providerKey}" around its consumers (by either ContextHookProvider or withContextHook)`
+        `You forgot to wrap provider "${providerKey}" around its consumers by either ContextHookProvider or withContextHook`
       );
     }
     return contextValue;
@@ -60,6 +70,7 @@ export function toContextHook<TReturn>(
 }
 
 export function ContextHookProvider(props: TProviderProps) {
+  reactMounted = true;
   const providerKey = getProviderKey(props.contextName);
 
   if (providers[providerKey] === undefined) {
