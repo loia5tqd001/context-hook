@@ -46,7 +46,7 @@ export function toContextHook<TReturn>(
     const contextValue = React.useContext(Context);
     if (contextValue === NO_PROVIDER) {
       console.warn(
-        `[context-hook]: You might forget to wrap your ${providerKey} context around its consumers (by either ContextHookProvider or withContextHook)`
+        `[context-hook]: You forgot to wrap provider "${providerKey}" around its consumers (by either ContextHookProvider or withContextHook)`
       );
     }
     return contextValue;
@@ -58,7 +58,7 @@ export function ContextHookProvider(props: TProviderProps) {
 
   if (providers[providerKey] === undefined) {
     console.warn(
-      `[context-hook]: ${providerKey} context is not created yet, have you called toContextHook anywhere?`
+      `[context-hook]: Provider "${providerKey}" is not consumed anywhere!`
     );
     return props.children as JSX.Element;
   }
