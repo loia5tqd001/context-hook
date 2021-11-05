@@ -41,7 +41,7 @@ export function toContextHook<Value>(
 }
 
 export function ContextHookProvider(
-  props: React.PropsWithChildren<{ contextName?: ContextName } & unknown>
+  props: React.PropsWithChildren<{ contextName?: ContextName }>
 ) {
   const providerKey = getProviderKey(props.contextName);
   const ContextProvider = combineProviders(providers[providerKey]); // TODO: handle exception
