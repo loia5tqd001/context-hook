@@ -92,7 +92,6 @@ export function withContextHook<Props>(
   Component: React.ComponentType<unknown>,
   contextName?: TContextName
 ) {
-  // TODO: handle Component name
   return (props: Props) => {
     return (
       <ContextHookProvider contextName={contextName}>
