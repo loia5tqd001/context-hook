@@ -28,8 +28,8 @@ const providers: Providers = {
 const getProviderKey = (key: ContextName | undefined): ContextName =>
   key === undefined ? '__GLOBAL__' : key;
 
-export function toContextHook<Value>(
-  hook: () => Value, // only accept non-parameter function
+export function toContextHook<HookReturn>(
+  hook: () => HookReturn, // only accept non-parameter function
   contextName?: ContextName
 ) {
   // TODO: check if hook has parameter then show warning
