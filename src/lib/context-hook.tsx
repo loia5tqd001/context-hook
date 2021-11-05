@@ -28,10 +28,11 @@ const providers: Providers = {
 const getProviderKey = (key: ContextName | undefined): ContextName =>
   key === undefined ? '__GLOBAL__' : key;
 
-export function toContextHook<Props, Value>(
-  hook: (props: Props) => Value,
+export function toContextHook<Value>(
+  hook: () => Value, // only accept non-parameter function
   contextName?: ContextName
 ) {
+  // TODO: check if hook has parameter then show warning
   const [provider, contextHook] = constate(hook);
   const providerKey = getProviderKey(contextName);
   if (providers[providerKey] === undefined) providers[providerKey] = [];
