@@ -1,12 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { ContextHookProvider } from './context-hook';
 import Page1 from './Page1';
 import Page2 from './Page2';
-import {
-  BooleanContext as BooleanContext2,
-  CounterContext as CounterContext2
-} from './Page2/context';
 
 function App() {
   return (
@@ -34,11 +31,9 @@ function App() {
 
 ReactDOM.render(
   <React.StrictMode>
-    <BooleanContext2>
-      <CounterContext2>
-        <App />
-      </CounterContext2>
-    </BooleanContext2>
+    <ContextHookProvider>
+      <App />
+    </ContextHookProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

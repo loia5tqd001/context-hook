@@ -1,14 +1,14 @@
 import React from "react";
-import constate from "../constate";
+import { toContextHook } from '../context-hook';
 
 const useBoolean = () => {
   return React.useState(false);
 };
 
-export const [BooleanContext, useBooleanContext] = constate(useBoolean);
+export const useBooleanContext = toContextHook(useBoolean);
 
 const useCounter = () => {
   return React.useState(1);
 };
 
-export const [CounterContext, useCounterContext] = constate(useCounter);
+export const useCounterContext = toContextHook(useCounter);

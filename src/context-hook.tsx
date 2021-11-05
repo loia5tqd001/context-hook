@@ -26,16 +26,24 @@ export const combineProviders = (providers: React.ComponentType[]) =>
       }
   );
 
-const providers: React.ComponentType<React.PropsWithChildren<any>>[] = [];
+type Providers = {
+  [key: '__DEFAULT__' | string]: React.ComponentType<
+    React.PropsWithChildren<any>
+  >[];
+};
+
+const providers: Providers = {
+  __DEFAULT__: [],
+};
 
 export function toContextHook<Props, Value>(useValue: (props: Props) => Value) {
   const [provider, hook] = constate(useValue);
-  providers.push(provider);
+  providers.__DEFAULT__.push(provider); // TODO: display warning if the user tries to call the hook twice
   return hook;
 }
 
 export function ContextHookProvider(props: React.PropsWithChildren<unknown>) {
-  const GlobalContext = combineProviders(providers);
+  const GlobalContext = combineProviders(providers.__DEFAULT__);
   return <GlobalContext>{props.children}</GlobalContext>;
 }
 
