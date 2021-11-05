@@ -44,6 +44,7 @@ export function ContextHookProvider(
   props: React.PropsWithChildren<{ contextName?: ContextName }>
 ) {
   const providerKey = getProviderKey(props.contextName);
+  // TODO: remove displayName for Provider
   const ContextProvider = combineProviders(providers[providerKey]); // TODO: handle exception
   return <ContextProvider>{props.children}</ContextProvider>;
 }
