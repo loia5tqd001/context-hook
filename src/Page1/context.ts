@@ -1,17 +1,17 @@
 import React from 'react';
-import constate from '../lib/constate';
-import { combineProviders } from '../lib/context-hook';
+import { toContextHook } from '../lib/context-hook';
+
+export const PAGE1_CONTEXT = 'PAGE1';
 
 const useBoolean = () => {
   return React.useState(false);
 };
 
-export const [BooleanContext, useBooleanContext] = constate(useBoolean);
+export const useBooleanContext = toContextHook(useBoolean, PAGE1_CONTEXT);
 
 const useCounter = () => {
   return React.useState(1);
 };
 
-export const [CounterContext, useCounterContext] = constate(useCounter);
+export const useCounterContext = toContextHook(useCounter, PAGE1_CONTEXT);
 
-export const Page1Context = combineProviders([BooleanContext, CounterContext]);

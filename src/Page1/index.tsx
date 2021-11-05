@@ -1,6 +1,6 @@
 import React from 'react';
-import { withContext } from '../lib/context-hook';
-import { useBooleanContext, useCounterContext, Page1Context } from './context';
+import { useBooleanContext, useCounterContext, PAGE1_CONTEXT } from './context';
+import { withContextHook } from '../lib/context-hook';
 
 const Element1 = () => {
   const [bool, setBool] = useBooleanContext();
@@ -62,4 +62,4 @@ const Page1 = () => {
   );
 };
 
-export default withContext(Page1, Page1Context);
+export default withContextHook(Page1, PAGE1_CONTEXT);

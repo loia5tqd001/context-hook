@@ -1,17 +1,5 @@
+import React from 'react';
 import constate from './constate';
-
-export function withContext<Props>(
-  Component: React.ComponentType<Props>,
-  Context: React.ComponentType<React.PropsWithChildren<unknown>>
-) {
-  return function children(props: Props) {
-    return (
-      <Context>
-        <Component {...props} />
-      </Context>
-    );
-  };
-}
 
 // Copied from here: https://preview.redd.it/pqxa0m08fum71.png?width=1756&format=png&auto=webp&s=0f2beb0e9d476bcf535c1fba0d5efc041356cf6b
 export const combineProviders = (providers: React.ComponentType[]) =>
@@ -26,27 +14,49 @@ export const combineProviders = (providers: React.ComponentType[]) =>
       }
   );
 
+type ContextName = '__GLOBAL__' | string; // equals to just "string", but I put '__GLOBAL__' here for semantic reason
 type Providers = {
-  [key: '__DEFAULT__' | string]: React.ComponentType<
+  [contextName: ContextName]: React.ComponentType<
     React.PropsWithChildren<any>
   >[];
 };
 
 const providers: Providers = {
-  __DEFAULT__: [],
+  __GLOBAL__: [],
 };
 
-export function toContextHook<Props, Value>(useValue: (props: Props) => Value) {
-  const [provider, hook] = constate(useValue);
-  providers.__DEFAULT__.push(provider); // TODO: display warning if the user tries to call the hook twice
-  return hook;
+const getProviderKey = (key: ContextName | undefined): ContextName =>
+  key === undefined ? '__GLOBAL__' : key;
+
+export function toContextHook<Props, Value>(
+  hook: (props: Props) => Value,
+  contextName?: ContextName
+) {
+  const [provider, contextHook] = constate(hook);
+  const providerKey = getProviderKey(contextName);
+  if (providers[providerKey] === undefined) providers[providerKey] = [];
+  providers[providerKey].push(provider); // TODO: display warning if the user tries to call the hook twice (use the hook in the way not intended)
+  return contextHook;
 }
 
-export function ContextHookProvider(props: React.PropsWithChildren<unknown>) {
-  const GlobalContext = combineProviders(providers.__DEFAULT__);
-  return <GlobalContext>{props.children}</GlobalContext>;
+export function ContextHookProvider(
+  props: React.PropsWithChildren<{ contextName?: ContextName } & unknown>
+) {
+  const providerKey = getProviderKey(props.contextName);
+  const ContextProvider = combineProviders(providers[providerKey]); // TODO: handle exception
+  return <ContextProvider>{props.children}</ContextProvider>;
 }
 
-export function withContextHook(Component: React.ComponentType<unknown>) {
-  return withContext(Component, ContextHookProvider);
+export function withContextHook<Props>(
+  Component: React.ComponentType<unknown>,
+  contextName?: ContextName
+) {
+  // TODO: handle Component name
+  return function Children(props: Props) {
+    return (
+      <ContextHookProvider contextName={contextName}>
+        <Component {...props} />
+      </ContextHookProvider>
+    );
+  };
 }
