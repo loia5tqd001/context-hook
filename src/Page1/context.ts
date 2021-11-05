@@ -1,6 +1,6 @@
 import React from 'react';
-import constate from '../constate';
-import { combineProviders } from '../context-hook';
+import constate from '../lib/constate';
+import { combineProviders } from '../lib/context-hook';
 
 const useBoolean = () => {
   return React.useState(false);

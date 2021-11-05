@@ -1,5 +1,5 @@
 import React from "react";
-import { toContextHook } from '../context-hook';
+import { toContextHook } from '../lib/context-hook';
 
 const useBoolean = () => {
   return React.useState(false);

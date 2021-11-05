@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
-import { ContextHookProvider } from './context-hook';
+import { ContextHookProvider } from './lib/context-hook';
 import Page1 from './Page1';
 import Page2 from './Page2';
 

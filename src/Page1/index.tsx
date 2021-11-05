@@ -1,5 +1,5 @@
 import React from 'react';
-import { withContext } from '../context-hook';
+import { withContext } from '../lib/context-hook';
 import { useBooleanContext, useCounterContext, Page1Context } from './context';
 
 const Element1 = () => {
