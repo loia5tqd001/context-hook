@@ -66,7 +66,71 @@ function Count() {
 
 ## API
 
-This library only has 3 public APIs: `toContextHook`, `ContextHookProvider`, and `withContextHook` _- the last 2 you only need to touch once_.
+This library only has 3 public APIs: `toContextHook`, `ContextHookProvider`, and `withContextHook` _- usually the last 2 you only need to touch once_.
+
+### `toContextHook(hook, contextName?)`
+
+```jsx
+import { toContextHook } from 'context-hook';
+
+// a normal custom hook
+const useCounter = () => {};
+
+// turn the custom hook into a context-hook
+const useCounterContext = toContextHook(useCounter);
+```
+
+#### `hook: () => TReturn`
+
+The hook to turn into a context-hook, **this can only be a non-parametered function**. For hooks with parameters usage, you need to convert the parametered one to non-parameterd one, can refer to [this example]().
+
+#### `contextName?: string`
+
+If you want all of your context-hooks to behave like they are under a global context (see Redux), you don't need to care about `contextName`.
+
+However, if you want some of your context-hooks to behave like they are under a specific context level lower than global level in component tree, you can specify the `contextName`. You then need to wrap another `ContextHookProvider`/`withContextHook` around that component tree level with the corresponding `contextName` to make it work. Can refer to [this example]().
+
+### `ContextHookProvider({ contextName? })`
+
+The context provider of context-hooks. Normally you will want to wrap a global (without `contextName`) one around your whole application and that's it. However if you want to make a custom context level in your component tree, can use `contextName`, may refer to [this example]().
+
+```jsx
+function App() {
+  // Wrap your App with ContextHookProvider
+  return (
+    <ContextHookProvider>
+      <Button />
+      <Count />
+    </ContextHookProvider>
+  );
+}
+```
+
+```jsx
+const useCounterPage1Context = toContextHook(useCounter, 'PAGE1_CONTEXT');
+
+function Page1() {
+  // For whatever reason, you may want to wrap your Page 1 around a custom context level
+  return (
+    <ContextHookProvider contextName='PAGE1_CONTEXT'>
+      <Button />
+      <Count />
+    </ContextHookProvider>
+  );
+}
+```
+
+### `withContextHook(Component, contextName?)`
+
+It works like `ContextHookProvider` but sometimes you'll prefer this HOC syntax.
+
+```jsx
+export default withContextHook(App); // Wrap your App with withContextHook because you prefer it over ContextHookProvider
+```
+
+```jsx
+export default withContextHook(Page1, 'PAGE1_CONTEXT'); // You may want to use the HOC syntax to wrap your Page1 around a custom context level
+```
 
 ## FAQ
 
@@ -80,8 +144,6 @@ This library only has 3 public APIs: `toContextHook`, `ContextHookProvider`, and
 <br >
 <br >
 <br >
-
-### `toContextHook(hook, contextName?)`
 
 #### `hook: () => TValue`
 
