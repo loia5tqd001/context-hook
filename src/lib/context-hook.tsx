@@ -88,11 +88,11 @@ export function ContextHookProvider(props: TProviderProps) {
   return <ContextProvider>{props.children}</ContextProvider>;
 }
 
-export function withContextHook<Props>(
+export function withContextHook<TProps>(
   Component: React.ComponentType<unknown>,
   contextName?: TContextName
 ) {
-  return (props: Props) => {
+  return (props: TProps) => {
     return (
       <ContextHookProvider contextName={contextName}>
         <Component {...props} />
