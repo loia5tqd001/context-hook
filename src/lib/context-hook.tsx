@@ -65,7 +65,9 @@ export function toContextHook<TReturn>(
     const contextValue = React.useContext(Context);
     if (contextValue === NO_PROVIDER) {
       warning(
-        `You forgot to use either ContextHookProvider or withContextHook to wrap the provider "${providerKey}" around its corresponding consumers. Your ${functionNameQuote} function thus becomes a normal hook.`
+        contextName
+          ? `You forgot to use either ContextHookProvider or withContextHook to wrap the provider "${providerKey}" around its corresponding consumers. Your ${functionNameQuote} function thus becomes a normal hook.`
+          : `You forgot to use either ContextHookProvider or withContextHook to wrap the provider around your application. Your ${functionNameQuote} function thus becomes a normal hook.`
       );
     }
     return hook();
