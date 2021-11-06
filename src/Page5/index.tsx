@@ -1,9 +1,9 @@
 import React from 'react';
 import { useBoolean, useCounterContext, PAGE5_CONTEXT } from './context';
-import { withContextHook, toContextHook } from '../lib/context-hook';
+import { withToContext, toContext } from '../lib/to-context';
 
 const Element1 = () => {
-  const [bool, setBool] = toContextHook(useBoolean)();
+  const [bool, setBool] = toContext(useBoolean)();
   const [count, setCount] = useCounterContext();
 
   return (
@@ -28,7 +28,7 @@ const Element1 = () => {
 };
 
 const Element2 = () => {
-  const [bool, setBool] = toContextHook(useBoolean, 'page5')();
+  const [bool, setBool] = toContext(useBoolean, 'page5')();
   const [count, setCount] = useCounterContext();
 
   return (
@@ -62,4 +62,4 @@ const Page5 = () => {
   );
 };
 
-export default withContextHook(Page5, PAGE5_CONTEXT);
+export default withToContext(Page5, PAGE5_CONTEXT);

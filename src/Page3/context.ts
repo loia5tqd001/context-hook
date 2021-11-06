@@ -1,5 +1,5 @@
 import React from 'react';
-import { toContextHook } from '../lib/context-hook';
+import { toContext } from '../lib/to-context';
 
 const useCounter = (initialValue = 1) => {
   return React.useState(initialValue);
@@ -7,5 +7,5 @@ const useCounter = (initialValue = 1) => {
 
 export const useCountFrom1 = () => useCounter(1);
 
-export const useCountFrom1Context = toContextHook(useCountFrom1);
-export const useCountFrom2Context = toContextHook(() => useCounter(2));
+export const useCountFrom1Context = toContext(useCountFrom1);
+export const useCountFrom2Context = toContext(() => useCounter(2));
