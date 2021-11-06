@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="/logo/Logo.png" alt="to-context logo" width="350" />
+  <img src="/logo/Logo.png" alt="to-context-hook logo" width="350" />
 </p>
 
-The simpliest API ever to bring an arbitrary React custom hook into the global context.
+The simplest API ever to turn a normal React custom hook into a "context-hook", which means there is a context attached to the hook, thus not just the "stateful logic" but the states are also shared.
 
 > I use this package in my projects in place of Redux
 
@@ -11,37 +11,37 @@ The simpliest API ever to bring an arbitrary React custom hook into the global c
 npm:
 
 ```sh
-npm install to-context
+npm install to-context-hook
 ```
 
 yarn:
 
 ```sh
-yarn add to-context
+yarn add to-context-hook
 ```
 
 ## Usage
 
-1. First, you need to use either [`ToContextProvider`] or [`withToContext`] to wrap around your application.
+1. First, you need to use either [`ContextHookProvider`] or [`withContextHook`] to wrap around your application.
 
 ```jsx
 function App() {
-  // Wrap your App with ToContextProvider
+  // Wrap your App with ContextHookProvider
   return (
-    <ToContextProvider>
+    <ContextHookProvider>
       <Button />
       <Count />
-    </ToContextProvider>
+    </ContextHookProvider>
   );
 }
 
-export default withToContext(App); // Or by using the HOC syntax
+export default withContextHook(App); // Or by using the HOC syntax
 ```
 
-2. Turn any normal React custom hook into context by using [`toContext`].
+2. Turn any normal React custom hook into a context-hook by using [`toContextHook`].
 
 ```jsx
-import { toContext } from 'to-context';
+import { toContextHook } from 'to-context-hook';
 
 // Create a normal custom hook as usual
 function useCounter() {
@@ -50,8 +50,8 @@ function useCounter() {
   return { count, increment };
 }
 
-// Turn the custom hook into a context
-const useCounterContext = toContext(useCounter);
+// Turn the custom hook into a context-hook (in other words: attach the context to the hook)
+const useCounterContext = toContextHook(useCounter);
 
 function Button() {
   // Use the context
@@ -66,95 +66,93 @@ function Count() {
 }
 ```
 
-[`tocontext`]: #tocontexthook-contextname
-[`tocontextprovider`]: #tocontextprovider-contextname-
-[`withtocontext`]: #withtocontextcomponent-contextname
+[`tocontexthook`]: #tocontexthookhook-contextname
+[`contexthookprovider`]: #contextHookprovider-contextname-
+[`withcontexthook`]: #withcontexthookcomponent-contextname
 
 ## API
 
-This library only has 3 public APIs: [`toContext`], [`ToContextProvider`], and [`withToContext`] _- usually the last 2 you only need to touch once_.
+This library only has 3 public APIs: [`toContextHook`], [`ContextHookProvider`], and [`withContextHook`] _- and usually the last 2 you only need to touch once for lifetime_.
 
-### `toContext(hook, contextName?)`
+### `toContextHook(hook, contextName?)`
 
 ```jsx
-import { toContext } from 'to-context';
+import { toContextHook } from 'to-context-hook';
 
 // a normal custom hook
 const useCounter = () => {};
 
-// turn the custom hook into a context
-const useCounterContext = toContext(useCounter);
+// turn the custom hook into a context-hook
+const useCounterContext = toContextHook(useCounter);
 ```
 
 #### `hook: () => TReturn`
 
-The hook to turn into a context, **this can only be a non-parametered function**. For hooks with parameters usage, you need to convert the parametered one to non-parameterd one, can refer to [this example]().
+The hook to turn into a context-hook, **this can only be a non-parametered function**. For hooks with parameters usage, you need to convert the parametered one to non-parameterd one, can refer to [this example]().
 
 #### `contextName?: string`
 
-If you want all of your hooks to behave like they are under the global context (like Redux store), you don't need to care about `contextName`.
+If you want all of your hooks to behave like they are under one global context (like Redux store), you don't need to care about `contextName`, move on.
 
-However, if you want some of your contexts to be around a specific portion lower than the global level in component tree, you can use `contextName`. You then need to wrap another `ToContextProvider`/`withToContext` around that component tree level with the corresponding `contextName` used in [`toContext`]. Can refer to [this example]().
+However, if you want some of your contexts to be around a specific portion lower than the global level in component tree, you can use `contextName`. You then need to wrap another `ContextHookProvider`/`withContextHook` around that component tree level with the corresponding `contextName` used in [`toContextHook`]. Can refer to [this example]().
 
-### `ToContextProvider({ contextName? })`
+### `ContextHookProvider({ contextName? })`
 
-Normally you will want to wrap a global `ToContextProvider` (without `contextName`) once around your whole application and that's it.
+Normally you will want to wrap a global `ContextHookProvider` (without `contextName`) once around your whole application and that's it.
 
-**Global Provider (without `contextName`)**
+- Global Provider (without `contextName`)
 
 ```jsx
 function App() {
-  // Wrap your App with ToContextProvider
+  // Wrap your App with ContextHookProvider
   return (
-    <ToContextProvider>
+    <ContextHookProvider>
       <Button />
       <Count />
-    </ToContextProvider>
+    </ContextHookProvider>
   );
 }
 ```
 
-However if you want to make a custom context level in your component tree, can use another one with `contextName`, may refer to [this example]().
+However if you want to create a custom context level in your component tree, can use `contextName`, may refer to [this example]().
 
-**Portional level Provider (with `contextName`)**
+- Portional-level Provider (with `contextName`)
 
 ```jsx
-// Two hooks below are wrapped under a context separately from the global one
-const useCounterPage1 = toContext(useCounter, 'PAGE1_CONTEXT');
-const useTogglePage1 = toContext(useToggle, 'PAGE1_CONTEXT');
+// Two hooks below are wrapped under a separate context named PAGE1_CONTEXT, are separated from the global context
+const useCounterPage1 = toContextHook(useCounter, 'PAGE1_CONTEXT');
+const useTogglePage1 = toContextHook(useToggle, 'PAGE1_CONTEXT');
 
 function Page1() {
-  // Create context around your Page 1 separately from the global level one
+  // For each separate context, need another provider
   return (
-    <ToContextProvider contextName='PAGE1_CONTEXT'>
+    <ContextHookProvider contextName='PAGE1_CONTEXT'>
       <Button />
       <Count />
-    </ToContextProvider>
+    </ContextHookProvider>
   );
 }
 ```
 
-### `withToContext(Component, contextName?)`
+### `withContextHook(Component, contextName?)`
 
-It works like [`ToContextProvider`] but sometimes you'll prefer the HOC syntax.
+It works like [`ContextHookProvider`] but sometimes you prefer the HOC syntax.
 
-**without `contextName`**
+- without `contextName` (should be the default/global one)
 
 ```jsx
-export default withToContext(App);
+export default withContextHook(App);
 ```
 
-**with `contextName`**
+- with `contextName`
 
 ```jsx
-export default withToContext(Page1, 'PAGE1_CONTEXT');
+export default withContextHook(Page1, 'PAGE1_CONTEXT');
 ```
 
 ## FAQ
 
-## Comparasion
-
-## Contributing
+## Comparison
 
 ## License
 

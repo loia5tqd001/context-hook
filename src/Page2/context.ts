@@ -1,14 +1,14 @@
 import React from "react";
-import { toContext } from '../lib/to-context';
+import { toContextHook } from '../lib/to-context';
 
 const useBoolean = () => {
   return React.useState(false);
 };
 
-export const useBooleanContext = toContext(useBoolean);
+export const useBooleanContext = toContextHook(useBoolean);
 
 const useCounter = () => {
   return React.useState(1);
 };
 
-export const useCounterContext = toContext(useCounter);
+export const useCounterContext = toContextHook(useCounter);

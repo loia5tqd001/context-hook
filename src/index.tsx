@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
-import { ToContextProvider } from './lib/to-context';
+import { ContextHookProvider } from './lib/to-context';
 import Page1 from './Page1';
 import Page2 from './Page2';
 import Page3 from './Page3';
@@ -48,11 +48,11 @@ function App() {
 
 ReactDOM.render(
   <React.StrictMode>
-    <ToContextProvider>
-      <ToContextProvider contextName='context-not-being-consumed'>
+    <ContextHookProvider>
+      <ContextHookProvider contextName='context-not-being-consumed'>
         <App />
-      </ToContextProvider>
-    </ToContextProvider>
+      </ContextHookProvider>
+    </ContextHookProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,7 +1,7 @@
 import React from 'react';
-import { toContext, withToContext } from '../lib/to-context';
+import { toContextHook, withContextHook } from '../lib/to-context';
 
-const useValue = toContext(() => {
+const useValue = toContextHook(() => {
   return React.useRef(1);
 }, 'context-without-provider-maybe-for-typo-reason');
 
@@ -15,4 +15,4 @@ const Page4 = () => {
   );
 };
 
-export default withToContext(Page4, 'context-without-consumers-maybe-for-typo-reason');
+export default withContextHook(Page4, 'context-without-consumers-maybe-for-typo-reason');

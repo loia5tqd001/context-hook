@@ -17,7 +17,7 @@ let reactMounted = false;
 
 const warning = (message: string) =>
   console.log(
-    `%c [to-context]: ${message}`,
+    `%c [to-context-hook]: ${message}`,
     'font-weight: 500; color: red; border: yellow; background: #fcfad9;'
   );
 
@@ -33,7 +33,7 @@ const combineProviders = (providers: TProvider[]) =>
     );
   });
 
-export function toContext<TReturn>(
+export function toContextHook<TReturn>(
   hook: () => TReturn, // only accept non-parameter hook
   contextName?: TContextName
 ) {
@@ -74,7 +74,7 @@ export function toContext<TReturn>(
   };
 }
 
-export function ToContextProvider(props: TProviderProps) {
+export function ContextHookProvider(props: TProviderProps) {
   reactMounted = true;
   const providerKey = getProviderKey(props.contextName);
 
@@ -90,15 +90,15 @@ export function ToContextProvider(props: TProviderProps) {
   return <ContextProvider>{props.children}</ContextProvider>;
 }
 
-export function withToContext<TProps>(
+export function withContextHook<TProps>(
   Component: React.ComponentType<unknown>,
   contextName?: TContextName
 ) {
   return (props: TProps) => {
     return (
-      <ToContextProvider contextName={contextName}>
+      <ContextHookProvider contextName={contextName}>
         <Component {...props} />
-      </ToContextProvider>
+      </ContextHookProvider>
     );
   };
 }
